@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Navbar from './components/Navbar'
@@ -9,25 +8,12 @@ import Destinations from './pages/Destinations'
 import Services from './pages/Services'
 import Contact from './pages/Contact'
 
-import AdminLogin from './components/Admin/AdminLogin'
-import AdminDashboard from './components/Admin/AdminDashboard'
-
 import './App.css'
-
-
-function AdminPage() {
-  const token = localStorage.getItem('token')
-
-  return token ? <AdminDashboard /> : <AdminLogin />
-}
-
 
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
-
         {/* HOME */}
         <Route
           path="/"
@@ -38,7 +24,6 @@ function App() {
             </>
           }
         />
-
 
         {/* ABOUT */}
         <Route
@@ -51,7 +36,6 @@ function App() {
           }
         />
 
-
         {/* DESTINATIONS */}
         <Route
           path="/destinations"
@@ -62,7 +46,6 @@ function App() {
             </>
           }
         />
-
 
         {/* SERVICES */}
         <Route
@@ -75,7 +58,6 @@ function App() {
           }
         />
 
-
         {/* CONTACT */}
         <Route
           path="/contact"
@@ -86,16 +68,7 @@ function App() {
             </>
           }
         />
-
-
-        {/* ADMIN */}
-        <Route
-          path="/admin"
-          element={<AdminPage />}
-        />
-
       </Routes>
-
     </BrowserRouter>
   )
 }
