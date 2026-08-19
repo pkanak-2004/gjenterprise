@@ -46,7 +46,7 @@ cd backend
 *(On Windows Command Prompt / PowerShell, you can also run: `mvnw.cmd spring-boot:run`)*
 
 - **Backend URL:** `http://localhost:8080`
-- **Default Admin Account:** Initialized automatically by `DataInitializer` (e.g. `admin@gjenterprise.com` / `admin123`)
+- **Default Admin Account:** Initialized automatically by `DataInitializer` (`admin@gjenterprise.com` / `Admin@123`)
 
 ---
 
