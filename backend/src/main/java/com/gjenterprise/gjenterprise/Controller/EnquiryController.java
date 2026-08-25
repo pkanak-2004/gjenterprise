@@ -20,11 +20,14 @@ public class EnquiryController {
     }
 
     @PostMapping
-    public ResponseEntity<Enquiry> createEnquiry(@RequestBody Enquiry enquiry) {
-
-        Enquiry savedEnquiry = enquiryService.createEnquiry(enquiry);
-
-        return ResponseEntity.ok(savedEnquiry);
+    public ResponseEntity<?> createEnquiry(@RequestBody Enquiry enquiry) {
+        try {
+            Enquiry savedEnquiry = enquiryService.createEnquiry(enquiry);
+            return ResponseEntity.ok(savedEnquiry);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(java.util.Map.of("message", e.getMessage() != null ? e.getMessage() : "Error saving enquiry"));
+        }
     }
 
     

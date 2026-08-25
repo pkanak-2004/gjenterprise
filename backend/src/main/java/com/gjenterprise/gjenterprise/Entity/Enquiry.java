@@ -11,6 +11,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 @Entity
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
 public class Enquiry {
 
     @Id
@@ -25,6 +26,7 @@ public class Enquiry {
 
     private String destination;
 
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate travelDate;
 
     private Integer travellers;

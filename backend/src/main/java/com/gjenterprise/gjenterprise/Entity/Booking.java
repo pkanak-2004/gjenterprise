@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "bookings")
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
 public class Booking {
 
     @Id
@@ -32,6 +33,7 @@ public class Booking {
     private String customerEmail;
     private String customerPhone;
 
+    @com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate travelDate;
     private Integer adultsCount = 1;
     private Integer childrenCount = 0;
