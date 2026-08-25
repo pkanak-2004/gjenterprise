@@ -218,6 +218,29 @@ function AdminDashboard({ token, onLogout }) {
     } else if (activeTab === 'TEAM') {
       loadEmployees();
     }
+
+    // Auto-sync real-time data every 10 seconds
+    const pollInterval = setInterval(() => {
+      if (activeTab === 'LEADS') {
+        fetchAllEnquiries(token)
+          .then((data) => setEnquiries(Array.isArray(data) ? data : []))
+          .catch(() => {});
+      } else if (activeTab === 'BOOKINGS') {
+        fetchAllBookings(token)
+          .then((data) => setBookings(Array.isArray(data) ? data : []))
+          .catch(() => {});
+      } else if (activeTab === 'PAYMENTS') {
+        fetchAllPayments(token)
+          .then((data) => setPayments(Array.isArray(data) ? data : []))
+          .catch(() => {});
+      } else if (activeTab === 'DOCUMENTS') {
+        fetchAllDocuments(token)
+          .then((data) => setDocuments(Array.isArray(data) ? data : []))
+          .catch(() => {});
+      }
+    }, 10000);
+
+    return () => clearInterval(pollInterval);
   }, [activeTab, token]);
 
   const handleVerifyDocumentAction = async (docId, status, reason = '') => {

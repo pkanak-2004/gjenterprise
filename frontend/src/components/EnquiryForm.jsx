@@ -31,11 +31,18 @@ function EnquiryForm() {
     setMessage('')
 
     try {
-      const saved = await submitEnquiry({
-        ...formData,
-        travellers: parseInt(formData.travellers, 10),
-        travelDate: formData.travelDate || null,
-      })
+      const payload = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        destination: formData.destination,
+        service: formData.service || "Tour Package Enquiry",
+        travelDate: formData.travelDate ? formData.travelDate : null,
+        travellers: Number(formData.travellers) || 1,
+        message: formData.message || "Enquiry from website",
+      };
+
+      const saved = await submitEnquiry(payload);
 
       setMessage(
         `Thank you, ${saved.name}! Your enquiry for ${saved.destination} has been received.`
@@ -101,6 +108,7 @@ function EnquiryForm() {
         <input
           type="date"
           name="travelDate"
+          min={new Date().toISOString().split("T")[0]}
           value={formData.travelDate}
           onChange={handleChange}
         />

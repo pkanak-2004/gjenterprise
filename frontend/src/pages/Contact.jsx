@@ -75,6 +75,7 @@ function Contact() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [lastCreatedBookingRef, setLastCreatedBookingRef] = useState("");
 
   useEffect(() => {
@@ -143,8 +144,44 @@ function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setSubmitError("");
     setSubmitSuccess(false);
+
+    // 1. Full Name Validation
+    if (!formData.name || formData.name.trim().length < 2) {
+      setSubmitError("⚠️ Please enter your Full Name (minimum 2 characters).");
+      return;
+    }
+
+    // 2. Email Validation
+    const emailTrimmed = formData.email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(emailTrimmed)) {
+      setSubmitError("⚠️ Please enter a valid email address with a domain (e.g. user@gmail.com).");
+      return;
+    }
+
+    // 3. Phone Validation
+    const cleanPhone = formData.phone.replace(/[^0-9]/g, "");
+    if (cleanPhone.length < 10) {
+      setSubmitError("⚠️ Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    // 4. Destination Validation
+    if (!formData.destination) {
+      setSubmitError("⚠️ Please select a destination for your trip.");
+      return;
+    }
+
+    // 5. Travel Date Validation
+    const todayStr = new Date().toISOString().split("T")[0];
+    if (formData.travelDate && formData.travelDate < todayStr) {
+      setSubmitError("⚠️ Please select today or an upcoming travel date. Past dates cannot be booked.");
+      return;
+    }
+
+    setIsSubmitting(true);
 
     try {
       const addonsList = [];
@@ -161,12 +198,13 @@ function Contact() {
 
       // 1. Submit Enquiry to /api/enquiries
       const enquiryPayload = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
+        name: formData.name.trim(),
+        email: emailTrimmed,
+        phone: formData.phone.trim(),
         service: `${formData.destination} Tour Package (${formData.adultsCount} Adults)`,
         destination: formData.destination,
-        travelDate: formData.travelDate,
+        travelDate: formData.travelDate ? formData.travelDate : null,
+        travellers: Number(formData.adultsCount) + Number(formData.childrenCount),
         message: compiledSummary,
       };
 
@@ -183,10 +221,10 @@ function Contact() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             bookingReference: generatedRef,
-            customerName: formData.name,
-            customerEmail: formData.email,
-            customerPhone: formData.phone,
-            travelDate: formData.travelDate || new Date().toISOString().split("T")[0],
+            customerName: formData.name.trim(),
+            customerEmail: emailTrimmed,
+            customerPhone: formData.phone.trim(),
+            travelDate: formData.travelDate ? formData.travelDate : null,
             adultsCount: Number(formData.adultsCount),
             childrenCount: Number(formData.childrenCount),
             totalPrice: estimatedTotal,
@@ -201,13 +239,21 @@ function Contact() {
 
       if (response.ok) {
         setSubmitSuccess(true);
+        setSubmitError("");
         setLastCreatedBookingRef(generatedRef);
       } else {
-        alert("Something went wrong. Please check your details and try again.");
+        let errorMsg = "Unable to submit your trip request. Please verify your details.";
+        try {
+          const errorData = await response.json();
+          if (errorData && errorData.message) {
+            errorMsg = errorData.message;
+          }
+        } catch (jsonErr) {}
+        setSubmitError(`⚠️ ${errorMsg}`);
       }
     } catch (error) {
       console.error(error);
-      alert("Unable to connect to server. Please check your internet connection.");
+      setSubmitError("⚠️ Unable to connect to server. Please check your internet connection.");
     } finally {
       setIsSubmitting(false);
     }
@@ -367,13 +413,35 @@ function Contact() {
               </div>
             )}
 
+            {submitError && (
+              <div
+                style={{
+                  background: "#fef2f2",
+                  border: "1.5px solid #f87171",
+                  color: "#991b1b",
+                  padding: "14px 18px",
+                  borderRadius: "12px",
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  marginBottom: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <span>{submitError}</span>
+              </div>
+            )}
+
             <form className="enquiry-grid-form" onSubmit={handleSubmit}>
               {/* SECTION 1: CONTACT DETAILS */}
-              <div style={{ borderBottom: "1.5px solid #f1f5f9", paddingBottom: "16px", marginBottom: "16px" }}>
-                <span style={{ fontSize: "11px", fontWeight: "900", color: "#1e3a8a", textTransform: "uppercase", letterSpacing: "1px" }}>
-                  1. Contact Information
-                </span>
-                <div className="form-2col-row" style={{ marginTop: "10px" }}>
+              <div className="form-section-block">
+                <div className="form-section-header">
+                  <span className="form-section-badge">1</span>
+                  <h4 className="form-section-title">Contact Information</h4>
+                </div>
+
+                <div className="form-2col-row">
                   <div className="form-input-group">
                     <label>Full Name *</label>
                     <input
@@ -399,7 +467,7 @@ function Contact() {
                   </div>
                 </div>
 
-                <div className="form-2col-row">
+                <div className="form-2col-row" style={{ marginTop: "16px" }}>
                   <div className="form-input-group">
                     <label>Phone / WhatsApp Number *</label>
                     <input
@@ -432,11 +500,13 @@ function Contact() {
               </div>
 
               {/* SECTION 2: NUMBER OF TRAVELLERS (GUESTS & ROOMS) */}
-              <div style={{ borderBottom: "1.5px solid #f1f5f9", paddingBottom: "16px", marginBottom: "16px" }}>
-                <span style={{ fontSize: "11px", fontWeight: "900", color: "#1e3a8a", textTransform: "uppercase", letterSpacing: "1px" }}>
-                  2. Number of Travellers &amp; Dates
-                </span>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px", marginTop: "10px" }}>
+              <div className="form-section-block">
+                <div className="form-section-header">
+                  <span className="form-section-badge">2</span>
+                  <h4 className="form-section-title">Number of Travellers &amp; Dates</h4>
+                </div>
+
+                <div className="form-3col-row">
                   <div className="form-input-group">
                     <label>👥 Adults (12+ Yrs) *</label>
                     <select
@@ -453,7 +523,7 @@ function Contact() {
                   </div>
 
                   <div className="form-input-group">
-                    <label>🧒 Children (Below 12 Yrs)</label>
+                    <label>🧒 Children (&lt;12 Yrs)</label>
                     <select
                       name="childrenCount"
                       value={formData.childrenCount}
@@ -483,12 +553,13 @@ function Contact() {
                   </div>
                 </div>
 
-                <div className="form-2col-row" style={{ marginTop: "12px" }}>
+                <div className="form-2col-row" style={{ marginTop: "16px" }}>
                   <div className="form-input-group">
-                    <label>Preferred Travel Date</label>
+                    <label>Preferred Travel Date (Upcoming)</label>
                     <input
                       type="date"
                       name="travelDate"
+                      min={new Date().toISOString().split("T")[0]}
                       value={formData.travelDate}
                       onChange={handleChange}
                     />
@@ -512,12 +583,13 @@ function Contact() {
               </div>
 
               {/* SECTION 3: SERVICE PREFERENCES (HOTEL, CAB, MEALS) */}
-              <div style={{ borderBottom: "1.5px solid #f1f5f9", paddingBottom: "16px", marginBottom: "16px" }}>
-                <span style={{ fontSize: "11px", fontWeight: "900", color: "#1e3a8a", textTransform: "uppercase", letterSpacing: "1px" }}>
-                  3. Service &amp; Hospitality Preferences
-                </span>
+              <div className="form-section-block">
+                <div className="form-section-header">
+                  <span className="form-section-badge">3</span>
+                  <h4 className="form-section-title">Service &amp; Hospitality Preferences</h4>
+                </div>
 
-                <div className="form-input-group" style={{ marginTop: "10px" }}>
+                <div className="form-input-group">
                   <label>🏨 Hotel Category / Stay Tier</label>
                   <select
                     name="hotelCategory"
@@ -532,7 +604,7 @@ function Contact() {
                   </select>
                 </div>
 
-                <div className="form-input-group" style={{ marginTop: "12px" }}>
+                <div className="form-input-group" style={{ marginTop: "14px" }}>
                   <label>🚗 Cab &amp; Transportation Mode</label>
                   <select
                     name="cabType"
@@ -547,7 +619,7 @@ function Contact() {
                   </select>
                 </div>
 
-                <div className="form-input-group" style={{ marginTop: "12px" }}>
+                <div className="form-input-group" style={{ marginTop: "14px" }}>
                   <label>🍳 Meal Plan Preference</label>
                   <select
                     name="mealPlan"
@@ -564,13 +636,14 @@ function Contact() {
               </div>
 
               {/* SECTION 4: INCLUSIONS & ADD-ON SERVICES */}
-              <div style={{ borderBottom: "1.5px solid #f1f5f9", paddingBottom: "16px", marginBottom: "16px" }}>
-                <span style={{ fontSize: "11px", fontWeight: "900", color: "#1e3a8a", textTransform: "uppercase", letterSpacing: "1px" }}>
-                  4. Included Services &amp; Special Add-ons
-                </span>
+              <div className="form-section-block">
+                <div className="form-section-header">
+                  <span className="form-section-badge">4</span>
+                  <h4 className="form-section-title">Included Services &amp; Special Add-ons</h4>
+                </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "12px" }}>
-                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "8px 12px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "10px 14px", borderRadius: "10px", border: "1.5px solid #e2e8f0" }}>
                     <input
                       type="checkbox"
                       name="flightsRequired"
@@ -580,7 +653,7 @@ function Contact() {
                     <span>✈️ Flight Tickets Booking</span>
                   </label>
 
-                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "8px 12px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "10px 14px", borderRadius: "10px", border: "1.5px solid #e2e8f0" }}>
                     <input
                       type="checkbox"
                       name="sightseeingPass"
@@ -590,7 +663,7 @@ function Contact() {
                     <span>🎟️ Sightseeing Entry Passes</span>
                   </label>
 
-                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "8px 12px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "10px 14px", borderRadius: "10px", border: "1.5px solid #e2e8f0" }}>
                     <input
                       type="checkbox"
                       name="honeymoonSpecial"
@@ -600,7 +673,7 @@ function Contact() {
                     <span>🌹 Honeymoon Candlelight Setup</span>
                   </label>
 
-                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "8px 12px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "10px 14px", borderRadius: "10px", border: "1.5px solid #e2e8f0" }}>
                     <input
                       type="checkbox"
                       name="insurance"
@@ -610,7 +683,7 @@ function Contact() {
                     <span>🛡️ Travel Insurance Coverage</span>
                   </label>
 
-                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "8px 12px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", background: "#f8fafc", padding: "10px 14px", borderRadius: "10px", border: "1.5px solid #e2e8f0" }}>
                     <input
                       type="checkbox"
                       name="adventurePass"
@@ -623,15 +696,22 @@ function Contact() {
               </div>
 
               {/* SECTION 5: SPECIAL NOTES */}
-              <div className="form-input-group">
-                <label>Special Requests / Specific Requirements</label>
-                <textarea
-                  name="message"
-                  placeholder="Any specific hotel preferences, senior citizen care, airport pickup time, vegetarian/Jain food notes, etc."
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows={3}
-                ></textarea>
+              <div className="form-section-block" style={{ borderBottom: "none", marginBottom: "0", paddingBottom: "0" }}>
+                <div className="form-section-header">
+                  <span className="form-section-badge">5</span>
+                  <h4 className="form-section-title">Special Requests &amp; Requirements</h4>
+                </div>
+
+                <div className="form-input-group">
+                  <label>Custom Notes &amp; Dietary/Hotel Preferences</label>
+                  <textarea
+                    name="message"
+                    placeholder="Any specific hotel preferences, senior citizen care, airport pickup time, vegetarian/Jain food notes, etc."
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={3}
+                  ></textarea>
+                </div>
               </div>
 
               {/* ESTIMATED LIVE PRICE SUMMARY */}

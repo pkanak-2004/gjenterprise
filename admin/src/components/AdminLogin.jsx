@@ -9,11 +9,19 @@ function AdminLogin({ onLoginSuccess }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);
     setError('');
 
+    const emailTrimmed = email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(emailTrimmed)) {
+      setError('⚠️ Please enter a valid admin email address (e.g. admin@gjenterprise.com)');
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const data = await adminLogin(email, password);
+      const data = await adminLogin(emailTrimmed, password);
       localStorage.setItem('token', data.token);
       localStorage.setItem('adminEmail', email);
       if (onLoginSuccess) {

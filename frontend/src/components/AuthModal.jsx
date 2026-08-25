@@ -20,16 +20,45 @@ function AuthModal({ isOpen, onClose, initialMode = "login", customPrompt = "", 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    // 1. Email Format Validation
+    const emailTrimmed = formData.email.trim();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(emailTrimmed)) {
+      setError("⚠️ Please enter a valid email address with a domain (e.g. user@gmail.com).");
+      return;
+    }
+
+    // 2. Register-specific validation
+    if (!isLoginMode) {
+      if (formData.name.trim().length < 2) {
+        setError("⚠️ Please enter your full name (minimum 2 characters).");
+        return;
+      }
+
+      const cleanPhone = formData.phone.replace(/[^0-9]/g, "");
+      if (cleanPhone.length < 10) {
+        setError("⚠️ Please enter a valid 10-digit mobile number.");
+        return;
+      }
+    }
+
+    // 3. Password length validation
+    if (formData.password.length < 6) {
+      setError("⚠️ Password must be at least 6 characters long.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       if (isLoginMode) {
-        await login(formData.email, formData.password);
+        await login(emailTrimmed, formData.password);
       } else {
         await register(
-          formData.name,
-          formData.email,
-          formData.phone,
+          formData.name.trim(),
+          emailTrimmed,
+          formData.phone.trim(),
           formData.password
         );
       }
@@ -86,6 +115,7 @@ function AuthModal({ isOpen, onClose, initialMode = "login", customPrompt = "", 
               <input
                 type="text"
                 required
+                minLength={2}
                 placeholder="e.g. Rajesh Kumar"
                 value={formData.name}
                 onChange={(e) =>
@@ -100,6 +130,8 @@ function AuthModal({ isOpen, onClose, initialMode = "login", customPrompt = "", 
             <input
               type="email"
               required
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              title="Please enter a valid email address with a valid domain (e.g. user@gmail.com)"
               placeholder="e.g. user@gmail.com"
               value={formData.email}
               onChange={(e) =>
@@ -114,7 +146,9 @@ function AuthModal({ isOpen, onClose, initialMode = "login", customPrompt = "", 
               <input
                 type="tel"
                 required
-                placeholder="e.g. +91 9876543210"
+                pattern="[0-9]{10,15}"
+                title="Please enter a valid 10-digit mobile number"
+                placeholder="e.g. 9876543210"
                 value={formData.phone}
                 onChange={(e) =>
                   setFormData({ ...formData, phone: e.target.value })
@@ -128,7 +162,8 @@ function AuthModal({ isOpen, onClose, initialMode = "login", customPrompt = "", 
             <input
               type="password"
               required
-              placeholder="••••••••"
+              minLength={6}
+              placeholder="Minimum 6 characters"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
