@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ItineraryModal from "../components/ItineraryModal";
+import AuthModal from "../components/AuthModal";
+import { useAuth } from "../context/AuthContext";
+import { API_BASE } from "../services/api";
 import "./AllDestinations.css";
 
 const DESTINATION_FALLBACK_IMAGES = {
@@ -118,7 +121,7 @@ function AllDestinations() {
   const [activeModalPackage, setActiveModalPackage] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/packages")
+    fetch(`${API_BASE}/packages`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch destinations");
@@ -189,13 +192,11 @@ function AllDestinations() {
                 {tourPackage.description}
               </p>
 
-              <div className="destination-info">
-                {tourPackage.duration && (
-                  <div>
-                    <span className="info-label">Duration</span>
-                    <strong>{tourPackage.duration}</strong>
-                  </div>
-                )}
+              <div className="destination-details">
+                <div>
+                  <span className="info-label">Hotel Rating</span>
+                  <strong>★ 4.9 / 5</strong>
+                </div>
 
                 {tourPackage.price && (
                   <div>
@@ -207,7 +208,6 @@ function AllDestinations() {
                 )}
               </div>
 
-              {/* ACTION BUTTONS */}
               <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "12px" }}>
                 <button
                   type="button"
@@ -233,22 +233,20 @@ function AllDestinations() {
                   📖 View Itinerary & Inclusions
                 </button>
 
-                <Link
-                  to={`/contact?destination=${encodeURIComponent(
-                    tourPackage.destination || tourPackage.title || ""
-                  )}`}
+                <button
+                  type="button"
+                  onClick={() => handleSelectPackage(tourPackage)}
                   className="enquire-button"
-                  style={{ marginTop: "0px" }}
+                  style={{ marginTop: "0px", cursor: "pointer" }}
                 >
                   Enquire Now →
-                </Link>
+                </button>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* VIEW ALL / LOAD REST BUTTON */}
       {displayList.length > 6 && (
         <div className="view-all-wrapper">
           <button
@@ -261,13 +259,20 @@ function AllDestinations() {
         </div>
       )}
 
-      {/* ITINERARY MODAL */}
       {activeModalPackage && (
         <ItineraryModal
           tourPackage={activeModalPackage}
           onClose={() => setActiveModalPackage(null)}
         />
       )}
+
+      {/* AUTH PROMPT MODAL */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        customPrompt={authPrompt}
+        onSuccess={handleAuthSuccess}
+      />
     </section>
   );
 }

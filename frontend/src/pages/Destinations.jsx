@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import ItineraryModal from "../components/ItineraryModal";
+import AuthModal from "../components/AuthModal";
+import { useAuth } from "../context/AuthContext";
+import { API_BASE } from "../services/api";
 import "./Destinations.css";
 
 const DESTINATION_FALLBACK_IMAGES = {
@@ -168,8 +171,15 @@ const DEFAULT_DESTINATIONS = [
 
 function Destinations() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
   const [packages, setPackages] = useState(DEFAULT_DESTINATIONS);
   const [selectedItinerary, setSelectedItinerary] = useState(null);
+
+  // Auth Modal State for New Members choosing packages
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authPrompt, setAuthPrompt] = useState("");
+  const [pendingDestination, setPendingDestination] = useState(null);
 
   // Filters & Pagination State
   const [selectedCategory, setSelectedCategory] = useState("ALL");
@@ -177,8 +187,25 @@ function Destinations() {
   const [sortBy, setSortBy] = useState("RECOMMENDED");
   const [showAll, setShowAll] = useState(false);
 
+  const handleSelectPackage = (pkg) => {
+    if (!isLoggedIn) {
+      setPendingDestination(pkg.destination);
+      setAuthPrompt(`🔒 Please Sign In or Register to choose & customize the ${pkg.destination} package!`);
+      setAuthModalOpen(true);
+      return;
+    }
+    navigate(`/contact?destination=${encodeURIComponent(pkg.destination)}`);
+  };
+
+  const handleAuthSuccess = () => {
+    if (pendingDestination) {
+      navigate(`/contact?destination=${encodeURIComponent(pendingDestination)}`);
+      setPendingDestination(null);
+    }
+  };
+
   useEffect(() => {
-    fetch("http://localhost:8080/api/packages")
+    fetch(`${API_BASE}/packages`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
@@ -349,12 +376,13 @@ function Destinations() {
                     >
                       Itinerary 📋
                     </button>
-                    <Link
-                      to={`/contact?destination=${encodeURIComponent(item.destination)}`}
+                    <button
+                      type="button"
+                      onClick={() => handleSelectPackage(item)}
                       className="btn-book-solid"
                     >
                       Enquire Now →
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -402,6 +430,14 @@ function Destinations() {
           onClose={() => setSelectedItinerary(null)}
         />
       )}
+
+      {/* AUTH PROMPT MODAL FOR NEW MEMBERS */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        customPrompt={authPrompt}
+        onSuccess={handleAuthSuccess}
+      />
     </div>
   );
 }

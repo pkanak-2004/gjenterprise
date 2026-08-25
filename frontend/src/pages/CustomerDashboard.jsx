@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import AuthModal from "../components/AuthModal";
 import ItineraryModal from "../components/ItineraryModal";
+import { API_BASE } from "../services/api";
 import "./CustomerDashboard.css";
 
 const DESTINATION_FALLBACK_IMAGES = {
@@ -127,7 +128,7 @@ function CustomerDashboard() {
   const fetchDocuments = async () => {
     try {
       if (!user?.email) return;
-      const res = await fetch(`http://localhost:8080/api/documents/my?email=${encodeURIComponent(user.email)}`, {
+      const res = await fetch(`${API_BASE}/documents/my?email=${encodeURIComponent(user.email)}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (res.ok) {
@@ -154,7 +155,7 @@ function CustomerDashboard() {
 
         // Fetch My Bookings (Strictly isolated by current user email)
         const emailQuery = user?.email ? `?email=${encodeURIComponent(user.email)}` : "";
-        const bookingsRes = await fetch(`http://localhost:8080/api/bookings/my${emailQuery}`, {
+        const bookingsRes = await fetch(`${API_BASE}/bookings/my${emailQuery}`, {
           headers: {
             Authorization: `Bearer ${token || ""}`,
           },
@@ -177,7 +178,7 @@ function CustomerDashboard() {
         await fetchDocuments();
 
         // Fetch My Enquiries (Strictly isolated)
-        const enquiriesRes = await fetch("http://localhost:8080/api/enquiries");
+        const enquiriesRes = await fetch(`${API_BASE}/enquiries`);
         if (enquiriesRes.ok) {
           const eData = await enquiriesRes.json();
           const myEnquiries = Array.isArray(eData)
@@ -220,7 +221,7 @@ function CustomerDashboard() {
         return;
       }
 
-      const res = await fetch(`http://localhost:8080/api/bookings`);
+      const res = await fetch(`${API_BASE}/bookings`);
       if (res.ok) {
         const allBookings = await res.json();
         const found = allBookings.find(
@@ -252,7 +253,7 @@ function CustomerDashboard() {
     try {
       setPaymentLoading(true);
       const res = await fetch(
-        `http://localhost:8080/api/payments?bookingId=${paymentModalBooking.id}`,
+        `${API_BASE}/payments?bookingId=${paymentModalBooking.id}`,
         {
           method: "POST",
           headers: {
@@ -302,7 +303,7 @@ function CustomerDashboard() {
 
       // Dispatch real-time Confirmation Email & SMS
       try {
-        fetch("http://localhost:8080/api/notifications/send-payment-receipt", {
+        fetch(`${API_BASE}/notifications/send-payment-receipt`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -369,7 +370,7 @@ function CustomerDashboard() {
         verificationStatus: "PENDING_REVIEW",
       };
 
-      const res = await fetch(`http://localhost:8080/api/documents/upload${bookingIdParam ? `?bookingId=${bookingIdParam}` : ""}`, {
+      const res = await fetch(`${API_BASE}/documents/upload${bookingIdParam ? `?bookingId=${bookingIdParam}` : ""}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -438,7 +439,7 @@ function CustomerDashboard() {
   const handleDeleteDocument = async (docId) => {
     if (!window.confirm("Are you sure you want to delete this document from your vault?")) return;
     try {
-      await fetch(`http://localhost:8080/api/documents/${docId}`, {
+      await fetch(`${API_BASE}/documents/${docId}`, {
         method: "DELETE",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });

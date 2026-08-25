@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import "./AuthModal.css";
 
-function AuthModal({ isOpen, onClose, initialMode = "login" }) {
+function AuthModal({ isOpen, onClose, initialMode = "login", customPrompt = "", onSuccess = null }) {
   const [isLoginMode, setIsLoginMode] = useState(initialMode === "login");
   const [formData, setFormData] = useState({
     name: "",
@@ -33,6 +33,9 @@ function AuthModal({ isOpen, onClose, initialMode = "login" }) {
           formData.password
         );
       }
+      if (onSuccess) {
+        onSuccess();
+      }
       onClose();
     } catch (err) {
       setError(err.message || "Authentication failed. Please try again.");
@@ -51,11 +54,27 @@ function AuthModal({ isOpen, onClose, initialMode = "login" }) {
         <div className="auth-modal-header">
           <span className="auth-brand-badge">GJ Enterprise</span>
           <h2>{isLoginMode ? "Welcome Back" : "Create Account"}</h2>
-          <p>
-            {isLoginMode
-              ? "Sign in to manage your bookings and enquiries"
-              : "Register to unlock exclusive travel packages & track bookings"}
-          </p>
+          {customPrompt ? (
+            <div style={{
+              background: "#eff6ff",
+              border: "1px solid #bfdbfe",
+              color: "#1e3a8a",
+              padding: "10px 14px",
+              borderRadius: "10px",
+              fontSize: "13px",
+              fontWeight: "600",
+              margin: "12px 0 6px",
+              textAlign: "center"
+            }}>
+              {customPrompt}
+            </div>
+          ) : (
+            <p>
+              {isLoginMode
+                ? "Sign in to manage your bookings and enquiries"
+                : "Register to unlock exclusive travel packages & track bookings"}
+            </p>
+          )}
         </div>
 
         {error && <div className="auth-error-alert">{error}</div>}

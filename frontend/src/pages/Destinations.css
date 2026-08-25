@@ -291,69 +291,89 @@
 }
 
 .dest-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 16px;
-  border-top: 1.5px solid #f1f5f9;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  padding-top: 16px !important;
+  border-top: 1.5px solid #f1f5f9 !important;
+  margin-top: auto !important;
 }
 
 .dest-price-box {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 2px !important;
 }
 
 .price-small-label {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: #94a3b8;
-  text-transform: uppercase;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
 }
 
 .price-amount {
-  font-size: 22px;
-  font-weight: 900;
-  color: #1e3a8a;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  color: #1e3a8a !important;
+  line-height: 1 !important;
 }
 
 .dest-btns-wrap {
-  display: flex;
-  gap: 8px;
+  display: flex !important;
+  gap: 8px !important;
+  width: 100% !important;
 }
 
 .btn-itinerary-outline {
-  background: #eff6ff;
-  color: #1e3a8a;
-  border: 1.5px solid #bfdbfe;
-  padding: 8px 14px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 12.5px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  flex: 1 !important;
+  background: #eff6ff !important;
+  color: #1e3a8a !important;
+  border: 1.5px solid #bfdbfe !important;
+  padding: 10px 8px !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  box-sizing: border-box !important;
 }
 
 .btn-itinerary-outline:hover {
-  background: #dbeafe;
+  background: #dbeafe !important;
+  border-color: #93c5fd !important;
 }
 
 .btn-book-solid {
-  background: #1e3a8a;
-  color: #ffffff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 30px;
-  font-weight: 800;
-  font-size: 12.5px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  flex: 1.25 !important;
+  background: #1e3a8a !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 10px !important;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
 }
 
 .btn-book-solid:hover {
-  background: #172554;
-  transform: translateY(-2px);
+  background: #172554 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25) !important;
 }
 
 /* Empty Results Message */

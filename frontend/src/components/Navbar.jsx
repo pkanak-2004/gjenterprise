@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AuthModal from './AuthModal';
 
@@ -7,110 +7,72 @@ function Navbar() {
   const { user, isLoggedIn, logout } = useAuth();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const closeMenus = () => {
+    setUserMenuOpen(false);
+    setMobileMenuOpen(false);
+  };
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <>
       <nav className="navbar">
-        <Link to="/" style={{ textDecoration: 'none' }}>
+        <Link to="/" style={{ textDecoration: 'none' }} onClick={closeMenus}>
           <div className="navbar-logo">
             GJ Enterprise
           </div>
         </Link>
 
+        {/* Desktop Navigation Links */}
         <div className="navbar-links">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/destinations">Destinations</Link>
-          <Link to="/services">Services</Link>
-          <Link to="/dashboard">My Trips</Link>
-          <Link to="/contact">Contact</Link>
+          <Link to="/" className={isActive('/') ? 'active' : ''}>Home</Link>
+          <Link to="/about" className={isActive('/about') ? 'active' : ''}>About</Link>
+          <Link to="/destinations" className={isActive('/destinations') ? 'active' : ''}>Destinations</Link>
+          <Link to="/services" className={isActive('/services') ? 'active' : ''}>Services</Link>
+          <Link to="/dashboard" className={isActive('/dashboard') ? 'active' : ''}>My Trips</Link>
+          <Link to="/contact" className={isActive('/contact') ? 'active' : ''}>Contact</Link>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {/* Right Actions */}
+        <div className="navbar-right-actions">
           {isLoggedIn ? (
             <div style={{ position: 'relative' }}>
               <button
                 type="button"
+                className="navbar-user-btn"
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                style={{
-                  background: '#eff6ff',
-                  border: '1.5px solid #bfdbfe',
-                  color: '#1e3a8a',
-                  padding: '8px 16px',
-                  borderRadius: '25px',
-                  fontWeight: '700',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
               >
-                👤 {user?.name || 'My Account'} ▾
+                👤 <span className="navbar-user-name">{user?.name ? user.name.split(' ')[0] : 'Account'}</span> ▾
               </button>
 
               {userMenuOpen && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '42px',
-                    right: 0,
-                    background: '#ffffff',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.12)',
-                    borderRadius: '10px',
-                    padding: '8px 0',
-                    minWidth: '160px',
-                    zIndex: 1001,
-                    border: '1px solid #e2e8f0',
-                  }}
-                >
+                <div className="navbar-user-dropdown">
                   <div style={{ padding: '8px 16px', borderBottom: '1px solid #f1f5f9', fontSize: '12px', color: '#64748b' }}>
                     {user?.email}
                   </div>
                   <Link
                     to="/dashboard"
-                    style={{
-                      display: 'block',
-                      padding: '8px 16px',
-                      color: '#1e3a8a',
-                      fontWeight: '700',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                    }}
-                    onClick={() => setUserMenuOpen(false)}
+                    className="dropdown-item"
+                    onClick={closeMenus}
                   >
                     ✈️ My Bookings & Tours
                   </Link>
                   <Link
                     to="/dashboard"
-                    style={{
-                      display: 'block',
-                      padding: '8px 16px',
-                      color: '#334155',
-                      textDecoration: 'none',
-                      fontSize: '14px',
-                    }}
-                    onClick={() => setUserMenuOpen(false)}
+                    className="dropdown-item"
+                    onClick={closeMenus}
                   >
                     📝 My Enquiries
                   </Link>
                   <button
                     type="button"
+                    className="dropdown-item logout"
                     onClick={() => {
                       logout();
-                      setUserMenuOpen(false);
-                    }}
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '8px 16px',
-                      background: 'none',
-                      border: 'none',
-                      color: '#dc2626',
-                      fontSize: '14px',
-                      fontWeight: '600',
-                      cursor: 'pointer',
+                      closeMenus();
                     }}
                   >
                     🚪 Logout
@@ -121,28 +83,87 @@ function Navbar() {
           ) : (
             <button
               type="button"
-              onClick={() => setAuthModalOpen(true)}
-              style={{
-                background: 'transparent',
-                border: '1.5px solid #1e3a8a',
-                color: '#1e3a8a',
-                padding: '9px 18px',
-                borderRadius: '25px',
-                fontWeight: '700',
-                fontSize: '14px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
+              className="navbar-signin-btn"
+              onClick={() => {
+                setAuthModalOpen(true);
+                closeMenus();
               }}
             >
               Sign In
             </button>
           )}
 
-          <Link to="/contact" className="navbar-button">
+          <Link to="/contact" className="navbar-button desktop-only" onClick={closeMenus}>
             Enquire Now
           </Link>
+
+          {/* Mobile Hamburger Toggle Button */}
+          <button
+            type="button"
+            className="navbar-mobile-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? '✕' : '☰'}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Slide-Down Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="navbar-mobile-menu">
+          <div className="navbar-mobile-links">
+            <Link to="/" className={isActive('/') ? 'active' : ''} onClick={closeMenus}>
+              🏠 Home
+            </Link>
+            <Link to="/about" className={isActive('/about') ? 'active' : ''} onClick={closeMenus}>
+              ℹ️ About Us
+            </Link>
+            <Link to="/destinations" className={isActive('/destinations') ? 'active' : ''} onClick={closeMenus}>
+              🏝️ Destinations
+            </Link>
+            <Link to="/services" className={isActive('/services') ? 'active' : ''} onClick={closeMenus}>
+              ⚙️ Services
+            </Link>
+            <Link to="/dashboard" className={isActive('/dashboard') ? 'active' : ''} onClick={closeMenus}>
+              ✈️ My Trips & Bookings
+            </Link>
+            <Link to="/contact" className={isActive('/contact') ? 'active' : ''} onClick={closeMenus}>
+              📞 Contact Us
+            </Link>
+          </div>
+
+          <div className="navbar-mobile-actions">
+            <Link to="/contact" className="navbar-mobile-enquire-btn" onClick={closeMenus}>
+              💬 Enquire Now
+            </Link>
+
+            {isLoggedIn ? (
+              <button
+                type="button"
+                className="navbar-mobile-logout-btn"
+                onClick={() => {
+                  logout();
+                  closeMenus();
+                }}
+              >
+                🚪 Logout ({user?.name || user?.email})
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="navbar-mobile-signin-btn"
+                onClick={() => {
+                  setAuthModalOpen(true);
+                  closeMenus();
+                }}
+              >
+                👤 Sign In / Register
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       <AuthModal
         isOpen={authModalOpen}

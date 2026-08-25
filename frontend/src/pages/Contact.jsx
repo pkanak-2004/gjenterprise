@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import AuthModal from "../components/AuthModal";
+import { API_BASE } from "../services/api";
 import "./Contact.css";
 
 const POPULAR_DESTINATIONS = [
@@ -41,14 +44,16 @@ const MEAL_PLANS = [
 
 function Contact() {
   const [searchParams] = useSearchParams();
+  const { user, isLoggedIn } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   const selectedService = searchParams.get("service") || "";
   const selectedDestination = searchParams.get("destination") || "";
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    name: user?.name || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
     destination: selectedDestination || "Kashmir",
     travelDate: "",
     duration: "5 Days / 4 Nights",
@@ -71,6 +76,17 @@ function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [lastCreatedBookingRef, setLastCreatedBookingRef] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || user.name || "",
+        email: prev.email || user.email || "",
+        phone: prev.phone || user.phone || "",
+      }));
+    }
+  }, [user]);
 
   useEffect(() => {
     const dest = searchParams.get("destination") || "";
@@ -154,7 +170,7 @@ function Contact() {
         message: compiledSummary,
       };
 
-      const response = await fetch("http://localhost:8080/api/enquiries", {
+      const response = await fetch(`${API_BASE}/enquiries`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(enquiryPayload),
@@ -162,7 +178,7 @@ function Contact() {
 
       // 2. Submit formal Booking to /api/bookings with exact guest count & service preferences
       try {
-        await fetch("http://localhost:8080/api/bookings", {
+        await fetch(`${API_BASE}/bookings`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -287,6 +303,41 @@ function Contact() {
               <h3>Customize Your Tour &amp; Request Instant Quotation</h3>
               <p>Select your guest count, hotel tier, cab type, and meal preferences below.</p>
             </div>
+
+            {!isLoggedIn && (
+              <div style={{
+                background: "#eff6ff",
+                border: "1.5px solid #bfdbfe",
+                borderRadius: "12px",
+                padding: "12px 16px",
+                marginBottom: "16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: "10px"
+              }}>
+                <div style={{ fontSize: "13.5px", color: "#1e3a8a", fontWeight: "600" }}>
+                  👋 <strong>New Member?</strong> Sign in or register to track your trip live, view PDF vouchers & pay securely.
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setAuthModalOpen(true)}
+                  style={{
+                    background: "#1e3a8a",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: "20px",
+                    padding: "7px 16px",
+                    fontSize: "13px",
+                    fontWeight: "700",
+                    cursor: "pointer"
+                  }}
+                >
+                  Sign In / Register
+                </button>
+              </div>
+            )}
 
             {submitSuccess && (
               <div className="enquiry-success-banner" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -637,6 +688,12 @@ function Contact() {
           </div>
         </div>
       </section>
+      {/* AUTH MODAL FOR GUESTS */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        customPrompt="🔒 Sign in or create an account to view and manage your booking!"
+      />
     </div>
   );
 }

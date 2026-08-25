@@ -1,0 +1,17 @@
+﻿{
+  "projects": {
+    "default": "gjenterprise-63a79"
+  },
+  "targets": {
+    "gjenterprise-63a79": {
+      "hosting": {
+        "customer-app": [
+          "gjenterprise-63a79"
+        ],
+        "admin-app": [
+          "gjenterprise-63a79-admin"
+        ]
+      }
+    }
+  }
+}
