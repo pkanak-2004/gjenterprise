@@ -22,6 +22,7 @@ public class Enquiry {
     private String email;
     private String phone;
 
+    @jakarta.persistence.Column(columnDefinition = "TEXT")
     private String service;
 
     private String destination;
@@ -31,6 +32,7 @@ public class Enquiry {
 
     private Integer travellers;
 
+    @jakarta.persistence.Column(columnDefinition = "TEXT")
     private String message;
 
     // Lead Status

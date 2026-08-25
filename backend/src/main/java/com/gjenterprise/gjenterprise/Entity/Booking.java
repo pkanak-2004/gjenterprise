@@ -43,6 +43,7 @@ public class Booking {
 
     private String status = "PENDING"; // PENDING, CONFIRMED, COMPLETED, CANCELLED
 
+    @jakarta.persistence.Column(columnDefinition = "TEXT")
     private String specialRequests;
 
     private LocalDateTime createdAt;
