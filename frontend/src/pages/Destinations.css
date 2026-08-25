@@ -1,0 +1,447 @@
+/* =========================================================
+   DESTINATIONS PAGE - FULL WIDTH 94%+ RESPONSIVE STYLING
+   ========================================================= */
+
+.destinations-page-wrapper {
+  background-color: #f8fafc;
+  color: #1e293b;
+  min-height: 100vh;
+  padding-bottom: 100px;
+  width: 100%;
+}
+
+/* 1. Header Banner */
+.destinations-hero-banner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #ffffff;
+  padding: 80px 30px 60px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.destinations-hero-banner .hero-pill {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.destinations-hero-banner h1 {
+  font-size: 46px;
+  font-weight: 900;
+  margin: 0 0 14px;
+  letter-spacing: -0.5px;
+  color: #ffffff !important;
+}
+
+.destinations-hero-banner p {
+  font-size: 18px;
+  color: #e2e8f0 !important;
+  max-width: 750px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* 2. Controls Bar (Search, Category Pills, Sort) */
+.destinations-controls-container {
+  max-width: 1600px;
+  width: 94%;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Category Filter Tabs */
+.category-filter-tabs {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.cat-tab-btn {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  color: #475569;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.cat-tab-btn:hover {
+  border-color: #1e3a8a;
+  color: #1e3a8a;
+  background: #eff6ff;
+}
+
+.cat-tab-btn.active {
+  background: #1e3a8a;
+  color: #ffffff;
+  border-color: #1e3a8a;
+  box-shadow: 0 4px 14px rgba(30, 58, 138, 0.25);
+}
+
+/* Search & Sort Row */
+.search-sort-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dest-search-input-wrap {
+  position: relative;
+  flex: 1;
+  max-width: 450px;
+}
+
+.dest-search-input {
+  width: 100%;
+  padding: 12px 18px 12px 42px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  font-size: 14.5px;
+  font-weight: 600;
+  outline: none;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.dest-search-input:focus {
+  border-color: #1e3a8a;
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.search-icon-inside {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #94a3b8;
+}
+
+.sort-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort-select-wrap label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.sort-select {
+  padding: 10px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  outline: none;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.results-count-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+/* 3. Full-Width 4-Column Packages Grid */
+.destinations-grid-container {
+  max-width: 1600px;
+  width: 94%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.dest-pkg-card {
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.35s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.dest-pkg-card:hover {
+  transform: translateY(-8px);
+  border-color: #1e3a8a;
+  box-shadow: 0 20px 40px rgba(30, 58, 138, 0.12);
+}
+
+.dest-img-wrap {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.dest-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.dest-pkg-card:hover .dest-main-img {
+  transform: scale(1.07);
+}
+
+.dest-discount-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+.dest-duration-pill {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.dest-card-body {
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.dest-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.dest-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.dest-rating {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f59e0b;
+}
+
+.dest-desc {
+  font-size: 13.5px;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0 0 16px;
+  flex-grow: 1;
+}
+
+.dest-inclusions-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.inclusion-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #475569;
+  background: #f8fafc;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+.dest-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1.5px solid #f1f5f9;
+}
+
+.dest-price-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-small-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.price-amount {
+  font-size: 22px;
+  font-weight: 900;
+  color: #1e3a8a;
+}
+
+.dest-btns-wrap {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-itinerary-outline {
+  background: #eff6ff;
+  color: #1e3a8a;
+  border: 1.5px solid #bfdbfe;
+  padding: 8px 14px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-itinerary-outline:hover {
+  background: #dbeafe;
+}
+
+.btn-book-solid {
+  background: #1e3a8a;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 12.5px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-book-solid:hover {
+  background: #172554;
+  transform: translateY(-2px);
+}
+
+/* Empty Results Message */
+.empty-dest-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1.5px solid #e2e8f0;
+}
+
+.empty-dest-results h3 {
+  font-size: 22px;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.empty-dest-results p {
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+.btn-clear-search {
+  background: #1e3a8a;
+  color: #ffffff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* View All Destinations Bottom Button */
+.dest-view-all-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 50px auto 30px;
+  text-align: center;
+}
+
+.btn-dest-view-all {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: #ffffff;
+  border: none;
+  padding: 16px 44px;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(30, 58, 138, 0.25);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-dest-view-all:hover {
+  background: linear-gradient(135deg, #172554 0%, #1d4ed8 100%);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 35px rgba(30, 58, 138, 0.35);
+}
+
+/* Responsive Grid Breakdown */
+@media (max-width: 1400px) {
+  .destinations-grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .destinations-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .destinations-hero-banner h1 {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 640px) {
+  .destinations-grid-container {
+    grid-template-columns: 1fr;
+  }
+  .search-sort-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dest-search-input-wrap {
+    max-width: 100%;
+  }
+}

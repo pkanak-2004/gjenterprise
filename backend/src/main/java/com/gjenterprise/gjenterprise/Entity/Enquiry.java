@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 @Entity
 public class Enquiry {
@@ -18,6 +20,9 @@ public class Enquiry {
     private String name;
     private String email;
     private String phone;
+
+    private String service;
+
     private String destination;
 
     private LocalDate travelDate;
@@ -26,14 +31,43 @@ public class Enquiry {
 
     private String message;
 
+    // Lead Status
     private String status;
 
+    private String priority = "MEDIUM";
+
+    private String leadSource = "WEBSITE";
+
+    @jakarta.persistence.ManyToOne
+    private User assignedTo;
+
+    private LocalDate followUpDate;
+
+    @jakarta.persistence.Column(columnDefinition = "TEXT")
+    private String internalNotes;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 
     public Enquiry() {
     }
 
+    @PrePersist
+    public void onCreate() {
+
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+
+        if (this.status == null || this.status.isBlank()) {
+            this.status = "NEW";
+        }
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -65,6 +99,14 @@ public class Enquiry {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
     }
 
     public String getDestination() {
@@ -105,6 +147,46 @@ public class Enquiry {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getLeadSource() {
+        return leadSource;
+    }
+
+    public void setLeadSource(String leadSource) {
+        this.leadSource = leadSource;
+    }
+
+    public User getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(User assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
+    public LocalDate getFollowUpDate() {
+        return followUpDate;
+    }
+
+    public void setFollowUpDate(LocalDate followUpDate) {
+        this.followUpDate = followUpDate;
+    }
+
+    public String getInternalNotes() {
+        return internalNotes;
+    }
+
+    public void setInternalNotes(String internalNotes) {
+        this.internalNotes = internalNotes;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -1,19 +1,22 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 
 import Navbar from './components/Navbar'
-
 import Home from './pages/Home'
 import About from './pages/About'
 import Destinations from './pages/Destinations'
 import Services from './pages/Services'
 import Contact from './pages/Contact'
+import CustomerDashboard from './pages/CustomerDashboard'
 
 import './App.css'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+
         {/* HOME */}
         <Route
           path="/"
@@ -68,8 +71,30 @@ function App() {
             </>
           }
         />
+
+        {/* CUSTOMER DASHBOARD */}
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <Navbar />
+              <CustomerDashboard />
+            </>
+          }
+        />
+        <Route
+          path="/customer-dashboard"
+          element={
+            <>
+              <Navbar />
+              <CustomerDashboard />
+            </>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
+  </AuthProvider>
   )
 }
 

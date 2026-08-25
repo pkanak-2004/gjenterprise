@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+//import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,18 +31,27 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
-                // Login public
-                .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()
 
-                // Customer enquiry submit kar sakta hai
-                .requestMatchers(HttpMethod.POST, "/api/enquiries").permitAll()
+            .requestMatchers("/api/enquiries/**").permitAll()
 
-                // Enquiries dekhna/update/delete sirf ADMIN
-                .requestMatchers("/api/enquiries/**").hasRole("ADMIN")
+            .requestMatchers("/api/bookings/**").permitAll()
 
-                // Baaki sab protected
-                .anyRequest().authenticated()
-            )
+            .requestMatchers("/api/payments/**").permitAll()
+
+            .requestMatchers("/api/documents/**").permitAll()
+
+            .requestMatchers("/api/notifications/**").permitAll()
+
+            .requestMatchers("/api/users/**").permitAll()
+
+            .requestMatchers(HttpMethod.GET, "/api/packages/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/packages/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/api/packages/**").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/packages/**").hasRole("ADMIN")
+
+            .anyRequest().authenticated()
+)
 
             .addFilterBefore(
                 jwtAuthenticationFilter,

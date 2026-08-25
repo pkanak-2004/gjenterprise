@@ -1,0 +1,409 @@
+/* =========================================================
+   CONTACT US PAGE - FULL WIDTH 94%+ LUXURY STYLING
+   ========================================================= */
+
+.contact-page-wrapper {
+  background-color: #f8fafc;
+  color: #1e293b;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* 1. Grand Hero Banner */
+.contact-hero-banner {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 58, 138, 0.94) 100%),
+              url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=2400&q=85') center/cover no-repeat;
+  color: #ffffff;
+  padding: 120px 40px 90px;
+  text-align: center;
+  width: 100%;
+}
+
+.contact-hero-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.contact-pill-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  color: #ffffff !important;
+  padding: 8px 24px;
+  border-radius: 30px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.contact-hero-banner h1 {
+  font-size: 54px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 18px;
+  letter-spacing: -1px;
+  color: #ffffff !important;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.5);
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-hero-banner p {
+  font-size: 19px;
+  line-height: 1.65;
+  color: #f1f5f9 !important;
+  max-width: 800px;
+  margin: 0 auto;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 2. Main Contact & Enquiry Hub (Full Width 94%) */
+.contact-main-section {
+  max-width: 1600px;
+  width: 94%;
+  margin: 90px auto;
+  padding: 0;
+}
+
+.contact-2col-layout {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 60px;
+  align-items: flex-start;
+}
+
+/* Left Column: Direct Helplines & Office Info */
+.contact-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.info-header-box {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.info-pill {
+  display: inline-block;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-weight: 800;
+  font-size: 11.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  border: 1.5px solid #bfdbfe;
+}
+
+.info-header-box h2 {
+  font-size: 38px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  margin: 0 0 14px;
+  letter-spacing: -0.5px;
+}
+
+.info-header-box p {
+  font-size: 16px;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0 0 30px;
+}
+
+/* Contact Channels */
+.contact-channels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.channel-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  padding: 18px 22px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+}
+
+.channel-card:hover {
+  background: #ffffff;
+  border-color: #1e3a8a;
+  transform: translateX(6px);
+  box-shadow: 0 8px 22px rgba(30, 58, 138, 0.08);
+}
+
+.channel-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.bg-whatsapp { background: #dcfce7; }
+.bg-call { background: #eff6ff; }
+.bg-email { background: #fef3c7; }
+.bg-location { background: #f1f5f9; }
+
+.channel-card strong {
+  display: block;
+  font-size: 16px;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.channel-card span {
+  font-size: 13.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Assurance Card */
+.contact-trust-card {
+  background: #eff6ff;
+  border: 1.5px dashed #bfdbfe;
+  border-radius: 20px;
+  padding: 26px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.trust-icon {
+  font-size: 18px;
+}
+
+/* Right Column: Elevated Luxury Form */
+.enquiry-form-wrapper {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 28px;
+  padding: 56px 50px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+}
+
+.form-header-bar {
+  margin-bottom: 36px;
+  border-bottom: 1.5px solid #f1f5f9;
+  padding-bottom: 24px;
+}
+
+.form-header-bar h3 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px;
+  letter-spacing: -0.5px;
+}
+
+.form-header-bar p {
+  color: #64748b;
+  font-size: 16px;
+  margin: 0;
+}
+
+.enquiry-grid-form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.form-2col-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.form-input-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.form-input-group label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1e3a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+}
+
+.form-input-group input,
+.form-input-group select,
+.form-input-group textarea {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px 20px;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  background: #f8fafc;
+  transition: all 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input-group input:focus,
+.form-input-group select:focus,
+.form-input-group textarea:focus {
+  border-color: #1e3a8a;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.12);
+}
+
+.form-input-group textarea {
+  min-height: 150px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-submit-btn {
+  background: #1e3a8a;
+  color: #ffffff;
+  border: none;
+  padding: 18px 40px;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  margin-top: 14px;
+  box-shadow: 0 8px 24px rgba(30, 58, 138, 0.28);
+}
+
+.form-submit-btn:hover {
+  background: #172554;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(30, 58, 138, 0.38);
+}
+
+/* Success Banner */
+.enquiry-success-banner {
+  background: #dcfce7;
+  border: 1.5px solid #86efac;
+  color: #166534;
+  padding: 18px 24px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 3. Bottom Office & Logistics Highlights */
+.contact-bottom-pillars {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 90px 40px;
+  width: 100%;
+}
+
+.pillars-grid-4 {
+  max-width: 1600px;
+  width: 94%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.pillar-box {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 30px 24px;
+  transition: all 0.3s ease;
+}
+
+.pillar-box:hover {
+  background: #ffffff;
+  border-color: #1e3a8a;
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(30, 58, 138, 0.08);
+}
+
+.pillar-icon {
+  font-size: 32px;
+  margin-bottom: 14px;
+}
+
+.pillar-box h4 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px;
+}
+
+.pillar-box p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive Breakdown */
+@media (max-width: 1100px) {
+  .contact-2col-layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .pillars-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero-banner h1 {
+    font-size: 34px;
+  }
+  .form-2col-row {
+    grid-template-columns: 1fr;
+  }
+  .enquiry-form-wrapper {
+    padding: 30px 20px;
+  }
+  .info-header-box {
+    padding: 30px 20px;
+  }
+  .pillars-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
