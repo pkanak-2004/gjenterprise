@@ -19,6 +19,7 @@ import com.gjenterprise.gjenterprise.Service.BookingService;
 
 @RestController
 @RequestMapping("/api/bookings")
+@org.springframework.web.bind.annotation.CrossOrigin(origins = "*")
 public class BookingController {
 
     private final BookingService bookingService;
